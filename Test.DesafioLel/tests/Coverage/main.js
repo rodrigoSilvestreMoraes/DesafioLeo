@@ -224,7 +224,7 @@ var assemblies = [
   {
     "name": "Test.DesafioLeo",
     "classes": [
-      { "name": "Test.DesafioLeo.Controllers.AuthenticationController", "rp": "Test.DesafioLeo_AuthenticationController.html", "cl": 10, "ucl": 17, "cal": 27, "tl": 64, "ct": "LineCoverage", "mc": "-", "cb": 2, "tb": 10, "lch": [], "bch": [], "hc": [] },
+      { "name": "Test.DesafioLeo.Controllers.AuthenticationController", "rp": "Test.DesafioLeo_AuthenticationController.html", "cl": 27, "ucl": 0, "cal": 27, "tl": 64, "ct": "LineCoverage", "mc": "-", "cb": 10, "tb": 10, "lch": [], "bch": [], "hc": [] },
       { "name": "Test.DesafioLeo.Core.Domain.Context.Authentication.SimpleModel.AuthenticationRequest", "rp": "Test.DesafioLeo_AuthenticationRequest.html", "cl": 13, "ucl": 0, "cal": 13, "tl": 31, "ct": "LineCoverage", "mc": "-", "cb": 6, "tb": 6, "lch": [], "bch": [], "hc": [] },
     ]},
   {
