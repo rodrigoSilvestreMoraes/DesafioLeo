@@ -1,21 +1,18 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
-WORKDIR /app
-EXPOSE 80
-
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-WORKDIR /src
-COPY ["Test.DesafioLeo/Test.DesafioLeo.csproj", "Test.DesafioLeo/"]
-RUN dotnet restore "Test.DesafioLeo/Test.DesafioLeo.csproj"
-COPY . .
-WORKDIR "/src/Test.DesafioLeo"
-RUN dotnet build "Test.DesafioLeo.csproj" -c Release -o /app/build
+WORKDIR /build
+EXPOSE 5000
+ 
 
-FROM build AS publish
-RUN dotnet publish "Test.DesafioLeo.csproj" -c Release -o /app/publish
+COPY . /build
+RUN dotnet publish API/Test.DesafioLeo.csproj -c RELEASE --self-contained  -r linux-x64 -o src/out
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
+# build runtime image
+FROM mcr.microsoft.com/dotnet/runtime:5.0
+RUN sed -i 's/CipherString = DEFAULT@SECLEVEL=2/CipherString = DEFAULT@SECLEVEL=1/' /etc/ssl/openssl.cnf
+WORKDIR /build
+COPY --from=build /build/src/out ./
+
+ENV TZ=Brazil/East
+ENV ASPNETCORE_URLS=http://+:5000
+
 ENTRYPOINT ["dotnet", "Test.DesafioLeo.dll"]

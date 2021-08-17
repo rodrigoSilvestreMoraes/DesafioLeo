@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Test.DesafioLeo.Core.Domain.Context.Authentication.Config;
 using Test.DesafioLeo.Core.Domain.Context.Authentication.Services;
@@ -20,7 +21,10 @@ namespace Test.DesafioLeo
 
 		public Startup(IConfiguration configuration)
 		{
-			Configuration = configuration;
+			var builder = new ConfigurationBuilder();
+			builder.AddJsonFile("appsettings.json").AddEnvironmentVariables();
+			builder.AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true);
+			Configuration = builder.Build();
 		}
 
 		public IConfiguration Configuration { get; }
@@ -55,12 +59,9 @@ namespace Test.DesafioLeo
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
-			if (env.IsDevelopment())
-			{
-				app.UseDeveloperExceptionPage();
-				app.UseSwagger();
-				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Test.DesafioLeo v1"));
-			}
+			app.UseDeveloperExceptionPage();
+			app.UseSwagger();
+			app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Test.DesafioLeo v1"));
 
 			app.UseRouting();
 
